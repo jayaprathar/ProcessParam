@@ -1,0 +1,27 @@
+1.process_param completed table : ADD Column 
+                                equipment_id,
+                                Item_code,
+                                routecard_no,
+                                job_order_no,
+                                sub_loss_id,
+                                transaction_id,
+                                equipment_id
+2.equipment_id column is must in every completed table name
+
+3.loss_replace_dtl : Add COlumn pp_status = 'yes'
+
+4.master_equipment_lookup : add completed table_name along with equiment_id EX: ambattur_process_param_700t1_mon_yr
+
+5. validate whether the params(route_card_no,item_code,product_ref_id) correctly updated : 
+        Query : SELECT mp.route_card_no,mp.job_order_no,mp.item_code
+        FROM digital_factory_ent_v1_completed.routecard_042024 cr 
+        INNER JOIN digital_factory_ent_v1.master_product mp ON mp.product_id = cr.product_id
+        WHERE '2024-04-01 08:01:11' BETWEEN cr.product_start_time AND cr.product_end_time AND cr.machine_id = 328
+
+6.validate whether sub_loss_id updated correctly :
+
+       Query : SELECT mlc.sub_loss_id FROM digital_factory_ent_v1_completed.loss_042024 lo
+INNER JOIN digital_factory_ent_v1.master_loss_code mlc ON mlc.loss_id = lo.current_stop_code 
+WHERE '2024-04-01 08:01:11' BETWEEN lo.current_stop_begin_time AND DATE_ADD(lo.current_stop_begin_time, INTERVAL lo.current_stop_duration SECOND) AND lo.machine_id = 328;
+
+                        
